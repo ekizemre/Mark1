@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ASTOR2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Kullanici_Bilgi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kullanici_adi" Type="nvarchar" MaxLength="50" />
+          <Property Name="sifre" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TB_Araçlar">
+          <Key>
+            <PropertyRef Name="AraçID" />
+          </Key>
+          <Property Name="AraçID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlakaID" Type="int" Nullable="false" />
+          <Property Name="Marka" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="KoltukID" Type="int" />
+        </EntityType>
+        <EntityType Name="TB_Müsteriler">
+          <Key>
+            <PropertyRef Name="MüsteriID" />
+          </Key>
+          <Property Name="MüsteriID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MüsteriAd" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MüsteriSoyad" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Tel" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="TCNO" Type="char" MaxLength="11" Nullable="false" />
+          <Property Name="HesKodu" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="AraçID" Type="int" />
+        </EntityType>
+        <EntityType Name="TB_Personel">
+          <Key>
+            <PropertyRef Name="PersonelID" />
+          </Key>
+          <Property Name="PersonelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonelAd" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="PersonelSoyad" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="AraçID" Type="int" />
+        </EntityType>
+        <EntityType Name="TB_Seferler">
+          <Key>
+            <PropertyRef Name="SeferID" />
+          </Key>
+          <Property Name="SeferID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KalkışŞehirAd" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="VarışŞehirAd" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="SöförID" Type="int" Nullable="false" />
+          <Property Name="KalkışZamanı" Type="datetime" Nullable="false" />
+          <Property Name="TahminiSüre" Type="int" Nullable="false" />
+          <Property Name="BiletTutar" Type="int" />
+          <Property Name="AraçID" Type="int" />
+        </EntityType>
+        <EntityType Name="TB_şoförler">
+          <Key>
+            <PropertyRef Name="SöförID" />
+          </Key>
+          <Property Name="SöförID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Söförad" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Söförsoyad" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AraçID" Type="int" />
+          <Property Name="TotalTutar" Type="float" />
+        </EntityType>
+        <Association Name="FK_TB_Müsteriler_TB_Araçlar">
+          <End Role="TB_Araçlar" Type="Self.TB_Araçlar" Multiplicity="0..1" />
+          <End Role="TB_Müsteriler" Type="Self.TB_Müsteriler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Araçlar">
+              <PropertyRef Name="AraçID" />
+            </Principal>
+            <Dependent Role="TB_Müsteriler">
+              <PropertyRef Name="AraçID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Personel_TB_Araçlar">
+          <End Role="TB_Araçlar" Type="Self.TB_Araçlar" Multiplicity="0..1" />
+          <End Role="TB_Personel" Type="Self.TB_Personel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Araçlar">
+              <PropertyRef Name="AraçID" />
+            </Principal>
+            <Dependent Role="TB_Personel">
+              <PropertyRef Name="AraçID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Seferler_TB_Şoförler">
+          <End Role="TB_şoförler" Type="Self.TB_şoförler" Multiplicity="1" />
+          <End Role="TB_Seferler" Type="Self.TB_Seferler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_şoförler">
+              <PropertyRef Name="SöförID" />
+            </Principal>
+            <Dependent Role="TB_Seferler">
+              <PropertyRef Name="SöförID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_şoförler_TB_Araçlar">
+          <End Role="TB_Araçlar" Type="Self.TB_Araçlar" Multiplicity="0..1" />
+          <End Role="TB_şoförler" Type="Self.TB_şoförler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Araçlar">
+              <PropertyRef Name="AraçID" />
+            </Principal>
+            <Dependent Role="TB_şoförler">
+              <PropertyRef Name="AraçID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ASTOR2ModelStoreContainer">
+          <EntitySet Name="Kullanici_Bilgi" EntityType="Self.Kullanici_Bilgi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Araçlar" EntityType="Self.TB_Araçlar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Müsteriler" EntityType="Self.TB_Müsteriler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Personel" EntityType="Self.TB_Personel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Seferler" EntityType="Self.TB_Seferler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_şoförler" EntityType="Self.TB_şoförler" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TB_Müsteriler_TB_Araçlar" Association="Self.FK_TB_Müsteriler_TB_Araçlar">
+            <End Role="TB_Araçlar" EntitySet="TB_Araçlar" />
+            <End Role="TB_Müsteriler" EntitySet="TB_Müsteriler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Personel_TB_Araçlar" Association="Self.FK_TB_Personel_TB_Araçlar">
+            <End Role="TB_Araçlar" EntitySet="TB_Araçlar" />
+            <End Role="TB_Personel" EntitySet="TB_Personel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Seferler_TB_Şoförler" Association="Self.FK_TB_Seferler_TB_Şoförler">
+            <End Role="TB_şoförler" EntitySet="TB_şoförler" />
+            <End Role="TB_Seferler" EntitySet="TB_Seferler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_şoförler_TB_Araçlar" Association="Self.FK_TB_şoförler_TB_Araçlar">
+            <End Role="TB_Araçlar" EntitySet="TB_Araçlar" />
+            <End Role="TB_şoförler" EntitySet="TB_şoförler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ASTOR2Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Kullanici_Bilgi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kullanici_adi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TB_Araçlar">
+          <Key>
+            <PropertyRef Name="AraçID" />
+          </Key>
+          <Property Name="AraçID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlakaID" Type="Int32" Nullable="false" />
+          <Property Name="Marka" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="KoltukID" Type="Int32" />
+          <NavigationProperty Name="TB_Müsteriler" Relationship="Self.FK_TB_Müsteriler_TB_Araçlar" FromRole="TB_Araçlar" ToRole="TB_Müsteriler" />
+          <NavigationProperty Name="TB_Personel" Relationship="Self.FK_TB_Personel_TB_Araçlar" FromRole="TB_Araçlar" ToRole="TB_Personel" />
+          <NavigationProperty Name="TB_şoförler" Relationship="Self.FK_TB_şoförler_TB_Araçlar" FromRole="TB_Araçlar" ToRole="TB_şoförler" />
+        </EntityType>
+        <EntityType Name="TB_Müsteriler">
+          <Key>
+            <PropertyRef Name="MüsteriID" />
+          </Key>
+          <Property Name="MüsteriID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MüsteriAd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MüsteriSoyad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Tel" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TCNO" Type="String" MaxLength="11" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="HesKodu" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="AraçID" Type="Int32" />
+          <NavigationProperty Name="TB_Araçlar" Relationship="Self.FK_TB_Müsteriler_TB_Araçlar" FromRole="TB_Müsteriler" ToRole="TB_Araçlar" />
+        </EntityType>
+        <EntityType Name="TB_Personel">
+          <Key>
+            <PropertyRef Name="PersonelID" />
+          </Key>
+          <Property Name="PersonelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonelAd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PersonelSoyad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AraçID" Type="Int32" />
+          <NavigationProperty Name="TB_Araçlar" Relationship="Self.FK_TB_Personel_TB_Araçlar" FromRole="TB_Personel" ToRole="TB_Araçlar" />
+        </EntityType>
+        <EntityType Name="TB_Seferler">
+          <Key>
+            <PropertyRef Name="SeferID" />
+          </Key>
+          <Property Name="SeferID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KalkışŞehirAd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="VarışŞehirAd" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SöförID" Type="Int32" Nullable="false" />
+          <Property Name="KalkışZamanı" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TahminiSüre" Type="Int32" Nullable="false" />
+          <Property Name="BiletTutar" Type="Int32" />
+          <Property Name="AraçID" Type="Int32" />
+          <NavigationProperty Name="TB_şoförler" Relationship="Self.FK_TB_Seferler_TB_Şoförler" FromRole="TB_Seferler" ToRole="TB_şoförler" />
+        </EntityType>
+        <EntityType Name="TB_şoförler">
+          <Key>
+            <PropertyRef Name="SöförID" />
+          </Key>
+          <Property Name="SöförID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Söförad" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Söförsoyad" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AraçID" Type="Int32" />
+          <Property Name="TotalTutar" Type="Double" />
+          <NavigationProperty Name="TB_Araçlar" Relationship="Self.FK_TB_şoförler_TB_Araçlar" FromRole="TB_şoförler" ToRole="TB_Araçlar" />
+          <NavigationProperty Name="TB_Seferler" Relationship="Self.FK_TB_Seferler_TB_Şoförler" FromRole="TB_şoförler" ToRole="TB_Seferler" />
+        </EntityType>
+        <Association Name="FK_TB_Müsteriler_TB_Araçlar">
+          <End Role="TB_Araçlar" Type="Self.TB_Araçlar" Multiplicity="0..1" />
+          <End Role="TB_Müsteriler" Type="Self.TB_Müsteriler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Araçlar">
+              <PropertyRef Name="AraçID" />
+            </Principal>
+            <Dependent Role="TB_Müsteriler">
+              <PropertyRef Name="AraçID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Personel_TB_Araçlar">
+          <End Role="TB_Araçlar" Type="Self.TB_Araçlar" Multiplicity="0..1" />
+          <End Role="TB_Personel" Type="Self.TB_Personel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Araçlar">
+              <PropertyRef Name="AraçID" />
+            </Principal>
+            <Dependent Role="TB_Personel">
+              <PropertyRef Name="AraçID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_şoförler_TB_Araçlar">
+          <End Role="TB_Araçlar" Type="Self.TB_Araçlar" Multiplicity="0..1" />
+          <End Role="TB_şoförler" Type="Self.TB_şoförler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Araçlar">
+              <PropertyRef Name="AraçID" />
+            </Principal>
+            <Dependent Role="TB_şoförler">
+              <PropertyRef Name="AraçID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_Seferler_TB_Şoförler">
+          <End Role="TB_şoförler" Type="Self.TB_şoförler" Multiplicity="1" />
+          <End Role="TB_Seferler" Type="Self.TB_Seferler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_şoförler">
+              <PropertyRef Name="SöförID" />
+            </Principal>
+            <Dependent Role="TB_Seferler">
+              <PropertyRef Name="SöförID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ASTOR2Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Kullanici_Bilgi" EntityType="Self.Kullanici_Bilgi" />
+          <EntitySet Name="TB_Araçlar" EntityType="Self.TB_Araçlar" />
+          <EntitySet Name="TB_Müsteriler" EntityType="Self.TB_Müsteriler" />
+          <EntitySet Name="TB_Personel" EntityType="Self.TB_Personel" />
+          <EntitySet Name="TB_Seferler" EntityType="Self.TB_Seferler" />
+          <EntitySet Name="TB_şoförler" EntityType="Self.TB_şoförler" />
+          <AssociationSet Name="FK_TB_Müsteriler_TB_Araçlar" Association="Self.FK_TB_Müsteriler_TB_Araçlar">
+            <End Role="TB_Araçlar" EntitySet="TB_Araçlar" />
+            <End Role="TB_Müsteriler" EntitySet="TB_Müsteriler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Personel_TB_Araçlar" Association="Self.FK_TB_Personel_TB_Araçlar">
+            <End Role="TB_Araçlar" EntitySet="TB_Araçlar" />
+            <End Role="TB_Personel" EntitySet="TB_Personel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_şoförler_TB_Araçlar" Association="Self.FK_TB_şoförler_TB_Araçlar">
+            <End Role="TB_Araçlar" EntitySet="TB_Araçlar" />
+            <End Role="TB_şoförler" EntitySet="TB_şoförler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_Seferler_TB_Şoförler" Association="Self.FK_TB_Seferler_TB_Şoförler">
+            <End Role="TB_şoförler" EntitySet="TB_şoförler" />
+            <End Role="TB_Seferler" EntitySet="TB_Seferler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ASTOR2ModelStoreContainer" CdmEntityContainer="ASTOR2Entities">
+          <EntitySetMapping Name="Kullanici_Bilgi">
+            <EntityTypeMapping TypeName="ASTOR2Model.Kullanici_Bilgi">
+              <MappingFragment StoreEntitySet="Kullanici_Bilgi">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="kullanici_adi" ColumnName="kullanici_adi" />
+                <ScalarProperty Name="sifre" ColumnName="sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Araçlar">
+            <EntityTypeMapping TypeName="ASTOR2Model.TB_Araçlar">
+              <MappingFragment StoreEntitySet="TB_Araçlar">
+                <ScalarProperty Name="AraçID" ColumnName="AraçID" />
+                <ScalarProperty Name="PlakaID" ColumnName="PlakaID" />
+                <ScalarProperty Name="Marka" ColumnName="Marka" />
+                <ScalarProperty Name="KoltukID" ColumnName="KoltukID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Müsteriler">
+            <EntityTypeMapping TypeName="ASTOR2Model.TB_Müsteriler">
+              <MappingFragment StoreEntitySet="TB_Müsteriler">
+                <ScalarProperty Name="MüsteriID" ColumnName="MüsteriID" />
+                <ScalarProperty Name="MüsteriAd" ColumnName="MüsteriAd" />
+                <ScalarProperty Name="MüsteriSoyad" ColumnName="MüsteriSoyad" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="TCNO" ColumnName="TCNO" />
+                <ScalarProperty Name="HesKodu" ColumnName="HesKodu" />
+                <ScalarProperty Name="AraçID" ColumnName="AraçID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Personel">
+            <EntityTypeMapping TypeName="ASTOR2Model.TB_Personel">
+              <MappingFragment StoreEntitySet="TB_Personel">
+                <ScalarProperty Name="PersonelID" ColumnName="PersonelID" />
+                <ScalarProperty Name="PersonelAd" ColumnName="PersonelAd" />
+                <ScalarProperty Name="PersonelSoyad" ColumnName="PersonelSoyad" />
+                <ScalarProperty Name="AraçID" ColumnName="AraçID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_Seferler">
+            <EntityTypeMapping TypeName="ASTOR2Model.TB_Seferler">
+              <MappingFragment StoreEntitySet="TB_Seferler">
+                <ScalarProperty Name="SeferID" ColumnName="SeferID" />
+                <ScalarProperty Name="KalkışŞehirAd" ColumnName="KalkışŞehirAd" />
+                <ScalarProperty Name="VarışŞehirAd" ColumnName="VarışŞehirAd" />
+                <ScalarProperty Name="SöförID" ColumnName="SöförID" />
+                <ScalarProperty Name="KalkışZamanı" ColumnName="KalkışZamanı" />
+                <ScalarProperty Name="TahminiSüre" ColumnName="TahminiSüre" />
+                <ScalarProperty Name="BiletTutar" ColumnName="BiletTutar" />
+                <ScalarProperty Name="AraçID" ColumnName="AraçID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_şoförler">
+            <EntityTypeMapping TypeName="ASTOR2Model.TB_şoförler">
+              <MappingFragment StoreEntitySet="TB_şoförler">
+                <ScalarProperty Name="SöförID" ColumnName="SöförID" />
+                <ScalarProperty Name="Söförad" ColumnName="Söförad" />
+                <ScalarProperty Name="Söförsoyad" ColumnName="Söförsoyad" />
+                <ScalarProperty Name="AraçID" ColumnName="AraçID" />
+                <ScalarProperty Name="TotalTutar" ColumnName="TotalTutar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
